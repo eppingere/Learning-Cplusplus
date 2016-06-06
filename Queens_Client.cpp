@@ -3,7 +3,6 @@
 //Learning C++
 
 using namespace std;
-
 int** rank;
 int n = 10;
 
@@ -32,7 +31,6 @@ public:
     }
   }
 
-  //N getter method
   int getN(){ return n;}
 
   //unfinished board printer method
@@ -132,7 +130,7 @@ public:
     }
     return true;
   }
-  };
+};
 
 int nThMinRow(int *array, int rank){
   if(rank % 2 == 0){ return rank / 2; }
@@ -144,11 +142,11 @@ void queensRunner(int a, Queens board){
     board.printBoard();
   }
   for(int i = 0; i < n; ++i){
-    board.placePiece(i, nThMinRow(rank[a], i));
+    board.placePiece(a, nThMinRow(rank[a], i));
     if(board.isValid()){
       queensRunner(a + 1, board);
     }
-    board.placePiece(a,nThMinRow(rank[a], i));
+    board.placePiece(a, nThMinRow(rank[a], i));
   }
 }
 
