@@ -51,87 +51,87 @@ public:
 
 //placePiece method
 void placePiece(int col, int row){
-board[col][row] = !board[col][row];
+  board[col][row] = !board[col][row];
 }
 
 //testing diagonals in the up-right direction
 bool right(int row, int col){
-int count = 0;
+  int count = 0;
 
-for(int i = 0; i < n; ++i){
-  if( row- i < 0 || col + i > n + 1){
-    return true;
-  }
+  for(int i = 0; i < n; ++i){
+    if( row- i < 0 || col + i > n + 1){
+      return true;
+    }
 
-  else if(board[row - 1][col + 1]) {
-    ++count;
+    else if(board[row - 1][col + 1]) {
+      ++count;
 
-    if(count > 1){
-      return false;
+      if(count > 1){
+        return false;
+      }
     }
   }
-}
 
-return true;
+  return true;
 }
 
 //testing diagonals in the up-left direction
 bool left(int row, int col){
-int count = 0;
+  int count = 0;
 
-for(int i = 0; i < n; ++i){
-  if (row - i < 0 || col - i < 0){
-    return true;
-  }
+  for(int i = 0; i < n; ++i){
+    if (row - i < 0 || col - i < 0){
+      return true;
+    }
 
-  if(board[row - i][col - i]){
-    ++count;
-    if(count > 1){
-      return false;
+    if(board[row - i][col - i]){
+      ++count;
+      if(count > 1){
+        return false;
+      }
     }
   }
-}
-return true;
+  return true;
 }
 
 
 //tests a board's validity
 bool isValid(){
-++valids;
+  ++valids;
 
-for(int row = 0; row < n; ++row){
-  int count = 0;
+  for(int row = 0; row < n; ++row){
+    int count = 0;
 
-  for (int col = 0; col < n; ++col){
+    for (int col = 0; col < n; ++col){
 
-    if(board[row][col]){
-      ++count;
-      if(count > 1){
-        return false;
+      if(board[row][col]){
+        ++count;
+        if(count > 1){
+          return false;
+        }
       }
     }
   }
-}
 
-for(int row = 0; row < n; ++row){
-  int count = 0;
+  for(int row = 0; row < n; ++row){
+    int count = 0;
 
-  for (int col = 0; col < n; ++col){
+    for (int col = 0; col < n; ++col){
 
-    if(board[col][row]){
-      ++count;
-      if(count > 1){
-        return false;
+      if(board[col][row]){
+        ++count;
+        if(count > 1){
+          return false;
+        }
       }
     }
   }
-}
 
-for(int i = 0; i < n; ++i){
-  if(!(right(n - 1, i) && right(i, 0) && left(n - 1, i) && left(i, n - 1))){
-    return false;
+  for(int i = 0; i < n; ++i){
+    if(!(right(n - 1, i) && right(i, 0) && left(n - 1, i) && left(i, n - 1))){
+      return false;
+    }
   }
-}
-return true;
+  return true;
 }
 };

@@ -6,16 +6,146 @@ using namespace std;
 
 int** rank;
 int n = 10;
-int int main() {
-  Queens chessBoard = new Queens(n);
-  rank = ranking(rank);
-  queensRunner(0, chessBoard);
-  return 0;
+
+class Queens {
+
+  //public methods
+public:
+  int n;
+  int valids;
+  bool** board;
+
+  //Constructor
+  Queens(int n)
+  : n(n)
+  , valids(0)
+  {
+    board = new bool*[n];
+    for (int i = 0; i < n; ++i) {
+      board[i] = new bool[n];
+    }
+
+    for(int col = 0; col < n; ++col){
+      for(int row = 0; row < n; ++row){
+        board[col][row] = false;
+      }
+    }
+  }
+
+  //N getter method
+  int getN(){ return n;}
+
+  //unfinished board printer method
+  /*void printBoard(){
+  cout << "Board: " << isValid() << endl;
+
+  for(int col = 0; col < n; ++col){
+  for(int row = 0; row < n; ++row){
+  if(board[row][col])
+
 }
+}
+}
+*/
+
+
+//placePiece method
+void placePiece(int col, int row){
+  board[col][row] = !board[col][row];
+}
+
+//testing diagonals in the up-right direction
+bool right(int row, int col){
+  int count = 0;
+
+  for(int i = 0; i < n; ++i){
+    if( row- i < 0 || col + i > n + 1){
+      return true;
+    }
+
+    else if(board[row - 1][col + 1]) {
+      ++count;
+
+      if(count > 1){
+        return false;
+      }
+    }
+  }
+
+  return true;
+}
+
+//testing diagonals in the up-left direction
+bool left(int row, int col){
+  int count = 0;
+
+  for(int i = 0; i < n; ++i){
+    if (row - i < 0 || col - i < 0){
+      return true;
+    }
+
+    if(board[row - i][col - i]){
+      ++count;
+      if(count > 1){
+        return false;
+      }
+    }
+  }
+  return true;
+}
+
+
+//tests a board's validity
+bool isValid(){
+  ++valids;
+
+  for(int row = 0; row < n; ++row){
+    int count = 0;
+
+    for (int col = 0; col < n; ++col){
+
+      if(board[row][col]){
+        ++count;
+        if(count > 1){
+          return false;
+        }
+      }
+    }
+  }
+
+  for(int row = 0; row < n; ++row){
+    int count = 0;
+
+    for (int col = 0; col < n; ++col){
+
+      if(board[col][row]){
+        ++count;
+        if(count > 1){
+          return false;
+        }
+      }
+    }
+  }
+
+  for(int i = 0; i < n; ++i){
+    if(!(right(n - 1, i) && right(i, 0) && left(n - 1, i) && left(i, n - 1))){
+      return false;
+    }
+  }
+  return true;
+}
+};
+
+
+
+int nThMinRow(int *array, int rank){
+  if(rank % 2 == 0){ return rank / 2; }
+  return sizeof(array) - 1 - rank / 2;
+}
+
 void queensRunner(int a, Queens board){
   if (a == n){
     board.printBoard();
-    return true;
   }
   for(int i = 0; i < n; ++i){
     board.placePiece(i, nThMinRow(rank[a], i));
@@ -40,7 +170,9 @@ void queensRunner(int a, Queens board){
   return output;
 }
 
-int nThMinRow(int *array, int rank){
-  if(rank % 2 == 0){ return rank / 2; }
-  return sizeof(array) - 1 - rank / 2;
+int main() {
+  Queens chessBoard = new Queens(n);
+  rank = ranking(rank);
+  queensRunner(0, chessBoard);
+  return 0;
 }
