@@ -7,28 +7,33 @@ using namespace std;
 int main(){
 
   //intializes Queens class
-  class Queens{
+  class Queens {
 
-  //public methods
+    //public methods
   public:
-
     int n;
-    int valids = 0;
-
+    int valids;
+    bool** board;
 
     //Constructor
-    Queens(int n){
-      this.n = n;
-      board = bool[n][n]
-      for(int col = 0; col < n; col++){
-        for(int row = 0; row < n; row++){
+    Queens(int n)
+    : n(n)
+    , valids(0)
+    {
+      board = new bool*[n];
+      for (int i = 0; i < n; ++i) {
+        board[i] = new bool[n];
+      }
+
+      for(int col = 0; col < n; ++col){
+        for(int row = 0; row < n; ++row){
           board[col][row] = false;
         }
       }
     }
 
     //N getter method
-    static int getN(){ return n;}
+    int getN(){ return n;}
 
     //unfinished board printer method
     /*void printBoard(){
@@ -112,7 +117,7 @@ bool isValid(){
     int count = 0;
 
     for (int col = 0; col < n; ++col){
-
+      
       if(board[col][row]){
         ++count;
         if(count > 1){
