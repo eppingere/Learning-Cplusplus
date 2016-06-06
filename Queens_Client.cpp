@@ -7,20 +7,11 @@ using namespace std;
 int** rank;
 int n = 10;
 int int main() {
-
-
   Queens chessBoard = new Queens(n);
-
-
   rank = ranking(rank);
-
-
   queensRunner(0, chessBoard);
-
   return 0;
 }
-
-
 void queensRunner(int a, Queens board){
   if (a == n){
     board.printBoard();
