@@ -12,12 +12,14 @@ int main(){
   //public methods
   public:
 
-    int n = 30;
+    int n;
     int valids = 0;
-    bool board[n][n];
+
 
     //Constructor
     Queens(int n){
+      this.n = n;
+      board = bool[n][n]
       for(int col = 0; col < n; col++){
         for(int row = 0; row < n; row++){
           board[col][row] = false;
