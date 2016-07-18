@@ -2,65 +2,57 @@
 //6.6.16
 //Learning C++
 
-using namespace std;
-int** rank;
-int n = 10;
 
-class Queens {
+#include "Queens_Client.hpp"
 
-  //public methods
-public:
-  int n;
-  int valids;
-  bool** board;
 
-  //Constructor
-  Queens(int n)
-  : n(n)
-  , valids(0)
-  {
-    board = new bool*[n];
+#include <iostream>
+
+using EJ::Queens;
+
+
+//Constructor
+Queens::Queens(int n)
+: n(n)
+, valids(0)
+, boards(0)
+, board(n, std::vector<bool>(n, false))
+{}
+
+  //board printer method
+  void Queens::printBoard(){
+    std::cout << "Boards: " << boards++ << std::endl;
+
     for (int i = 0; i < n; ++i) {
-      board[i] = new bool[n];
-    }
-
-    for(int col = 0; col < n; ++col){
-      for(int row = 0; row < n; ++row){
-        board[col][row] = false;
+      for (int j = 0; j < n; ++j) {
+        if (board[i][j]){
+          std::cout <<" Q ";
+        }
+        else{
+          std::cout <<" _ ";
+        }
       }
+      std::cout << std::endl;
     }
+    std::cout << std::endl;
   }
 
-  int getN(){ return n;}
 
-  //unfinished board printer method
-  /*void printBoard(){
-  cout << "Board: " << isValid() << endl;
-
-  for(int col = 0; col < n; ++col){
-  for(int row = 0; row < n; ++row){
-  if(board[row][col])
-
-}
-}
-}
-*/
-
-//placePiece method
-  void placePiece(int col, int row){
+  //placePiece method
+  void Queens::placePiece(int col, int row){
     board[col][row] = !board[col][row];
   }
 
-//testing diagonals in the up-right direction
-  bool right(int row, int col){
+  //testing diagonals in the up-right direction
+  bool Queens::right(int row, int col){
     int count = 0;
 
     for(int i = 0; i < n; ++i){
-      if( row- i < 0 || col + i > n + 1){
+      if( row- i < 0 || col + i > n){
         return true;
       }
 
-      else if(board[row - 1][col + 1]) {
+      else if(board[row - i][col + i]) {
         ++count;
 
         if(count > 1){
@@ -72,8 +64,8 @@ public:
     return true;
   }
 
-//testing diagonals in the up-left direction
-  bool left(int row, int col){
+  //testing diagonals in the up-left direction
+  bool Queens::left(int row, int col){
     int count = 0;
 
     for(int i = 0; i < n; ++i){
@@ -91,8 +83,8 @@ public:
     return true;
   }
 
-//tests a board's validity
-  bool isValid(){
+  //tests a board's validity
+  bool Queens::isValid(){
     ++valids;
 
     for(int row = 0; row < n; ++row){
@@ -130,43 +122,65 @@ public:
     }
     return true;
   }
-};
 
-int nThMinRow(int *array, int rank){
-  if(rank % 2 == 0){ return rank / 2; }
-  return sizeof(array) - 1 - rank / 2;
-}
 
-void queensRunner(int a, Queens board){
-  if (a == n){
-    board.printBoard();
+  int Queens::nThMin(int nth){
+    if(nth % 2 == 0){ return  nth / 2; }
+    return n - 1 - nth / 2;
   }
-  for(int i = 0; i < n; ++i){
-    board.placePiece(a, nThMinRow(rank[a], i));
-    if(board.isValid()){
-      queensRunner(a + 1, board);
+
+  void Queens::ranking(std::vector<std::vector<int>> &output) const {
+
+    output.resize(n);
+    for(auto& v : output){
+      v.resize(n);
     }
-    board.placePiece(a, nThMinRow(rank[a], i));
-  }
-}
 
-int** ranking(int** input){
-  int output[sizeof(input)][sizeof(input[0])];
-
-  for (int row = 0; row < sizeof(output); ++row){
-    for (int col = 0; col < sizeof(output[0]); ++col){
-      if (row <= col && row <= n - row && row <= n - col ){output[row][col] = 3 * n - 2 + 2 * row;}
-      else if (col <= row && col <= n - row && col <= n - col) {output[row][col] = 3 * n - 2 + 2 * col;}
-      else if (n - col <= row && n - col <= n - row && n - col <= col) {output[row][col] = 3 * n - 2 + 2 * (n - col);}
-      else if (n - row <= row && n - row <= col && n - row <= n - col) {output[row][col] = 3 * n - 2 + 2 * (n - row);}
+    for (int row = 0; row < n; ++row){
+      for (int col = 0; col < n; ++col){
+        if (row <= col && row <= n - row && row <= n - col ){
+          output[row][col] = 3 * n - 2 + 2 * row;
+        }
+        else if (col <= row && col <= n - row && col <= n - col) {
+          output[row][col] = 3 * n - 2 + 2 * col;
+        }
+        else if (n - col <= row && n - col <= n - row && n - col <= col) {
+          output[row][col] = 3 * n - 2 + 2 * (n - col);
+        }
+        else if (n - row <= row && n - row <= col && n - row <= n - col) {
+          output[row][col] = 3 * n - 2 + 2 * (n - row);
+        }
+      }
     }
   }
-  return output;
-}
 
-int main() {
-  Queens chessBoard = new Queens(n);
-  rank = ranking(rank);
-  queensRunner(0, chessBoard);
-  return 0;
-}
+  void queensRunner(int a, int n, Queens &board){
+    if (a == n){
+      board.printBoard();
+    }
+    else{
+      for(int i = 0; i < n; ++i){
+        board.placePiece(a, board.nThMin(i));
+        if(board.isValid()){
+          queensRunner(a + 1, n, board);
+        }
+        board.placePiece(a, board.nThMin(i));
+      }
+    }
+  }
+
+
+
+  int main() {
+
+
+    int n = 15;
+    std::vector<std::vector<int> rank(10, std::vector<int>(10, 0));
+
+    Queens chessBoard(n);
+    chessBoard.printBoard();
+    chessBoard.ranking(rank);
+    chessBoard.printBoard();
+    queensRunner(0, n, chessBoard);
+    return 0;
+  }
